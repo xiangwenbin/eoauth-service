@@ -1,0 +1,19 @@
+instance:
+  app: oauth-service
+  #hostName: 10.0.101.18
+  #ipAddr: 10.0.101.18
+  status: UP
+  #vipAddress值要跟 app 名一样， 不能乱写，ribbon通过该字段去eureka 注册中心获取服务实例
+  #statusPageUrl: http://10.0.101.18:8090/info
+  vipAddress: oauth-service
+  dataCenterInfo:
+    '@class': com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo
+    name: MyOwn
+  #port: 8090
+eureka:
+  fetchRegistry: true
+  host: eureka-service
+  port: 8000
+  servicePath:  /eureka/apps/
+# 192.168.10.54
+#PRESSURE-SERVICE

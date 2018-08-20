@@ -1,0 +1,49 @@
+default:
+    appName: oauth-service
+    domain: oauth-service.com
+    logdir: ./logs/
+    server:
+        port: 8080
+dev:
+    server:
+        port: 8080
+    datasource:
+        host: 10.0.101.19
+        port: 3306
+        database: dev_account_center
+        username: root
+        password: 'Zhcpa@123'
+        pool:
+            max: 5
+            min: 0
+            idle: 10000
+        logging: true 
+test:
+    server:
+        port: 8080
+    datasource:
+        host: 10.0.101.19
+        port: 3306
+        database: accountcenter
+        username: root
+        password: 'Zhcpa@123'
+        pool:
+            max: 100
+            min: 5
+            idle: 10000
+        logging: false
+production:
+    server:
+        port: 8080
+    datasource:
+        host: 10.0.101.19
+        port: 3306
+        database: accountcenter
+        username: root
+        password: Zhcpa@123
+        pool:
+            max: 100
+            min: 1
+            idle: 10000
+        logging: false
+ 

@@ -1,0 +1,730 @@
+swagger: '2.0'
+info:
+  description: >-
+    企业用户统一认证平台服务API文档
+  version: 1.0.0
+  title: 企业用户统一认证平台服务API文档
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: wbxiang@zhcpa.cn
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+#host: 127.0.0.1
+basePath: /
+tags:
+  - name: login
+    description: 登录模块
+  - name: signup
+    description: 注册模块
+  - name: user
+    description: 用户模块
+  - name: oauth
+    description: 授权模块
+schemes:
+  - http
+paths:
+  /login/token:
+    post:
+      tags:
+        - login
+      summary: 用户密码登录校验(支持 用户名，手机号，邮箱) weekLogin 参数为 一周免登录标记
+      description: 用户密码登录校验(支持 用户名，手机号，邮箱) weekLogin 参数为 一周免登录标记
+      operationId: login_token
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: json 入参
+          required: true
+          schema:
+            $ref: '#/definitions/Credentials'
+      responses:
+        200:
+          properties:
+            code:
+              type: integer
+              format: int32
+              minimum: 200
+            data:
+              $ref: '#/definitions/LoginInfo'
+            msg:
+              type: string
+        400:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error400'
+        500:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error500'
+  /login/mobile/token/{clientId}/{mobile}:
+    get:
+      tags:
+        - login
+      summary: 通过手机号获取用户及token
+      description: 通过手机号获取用户及token
+      operationId: login_mobile_token
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: clientId
+          description: PathVariable
+          required: true
+          type: string
+        - in: path
+          name: mobile
+          description: PathVariable
+          required: true
+          type: string
+      responses:
+        200:
+          properties:
+            code:
+              type: integer
+              format: int32
+              minimum: 200
+            data:
+              $ref: '#/definitions/LoginInfo'
+            msg:
+              type: string
+        400:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error400'
+        500:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error500'
+  /signup/:
+    post:
+      tags:
+        - signup
+      summary: 用户名，手机号，邮箱注册
+      description: 用户名，手机号，邮箱注册
+      operationId: signup
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: json 入参
+          required: true
+          schema:
+            type: object 
+            properties:
+              username :
+                type: string
+              mobile :
+                type: string
+                format: int32
+              email :
+                type: string
+              password:
+                type: string
+                format: int32
+      responses:
+        200:
+          properties:
+            code:
+              type: integer
+              format: int32
+              minimum: 200
+            data:
+                $ref: '#/definitions/User'
+            msg:
+              type: string
+        400:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error400'
+        500:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error500'
+  /signup/mobile:
+    post:
+      tags:
+        - signup
+      summary: 手机号注册
+      description: 手机号注册
+      operationId: signup_mobile
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: json 入参
+          required: true
+          schema:
+            type: object 
+            properties:
+              mobile :
+                type: string
+                format: int32
+              password:
+                type: string
+                format: int32
+      responses:
+        200:
+          properties:
+            code:
+              type: integer
+              format: int32
+              minimum: 200
+            data:
+                $ref: '#/definitions/User'
+            msg:
+              type: string
+        400:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error400'
+        500:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error500'
+  /signup/mobile/{clientId}:
+    post:
+      tags:
+        - signup
+      summary: 手机号注册并返回user及token
+      description: 手机号注册并返回user及token
+      operationId: signup_mobile_clientId
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: clientId
+          description: PathVariable
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: json 入参
+          required: true
+          schema:
+            type: object 
+            properties:
+              mobile :
+                type: string
+                format: int32
+              password:
+                type: string
+                format: int32
+      responses:
+        200:
+          properties:
+            code:
+              type: integer
+              format: int32
+              minimum: 200
+            data:
+                $ref: '#/definitions/LoginInfo'
+            msg:
+              type: string
+        400:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error400'
+        500:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error500'
+  /signup/username:
+    post:
+      tags:
+        - signup
+      summary: 用户名注册
+      description: 用户名注册
+      operationId: signup_username
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: json 入参
+          required: true
+          schema:
+            type: object 
+            properties:
+              username :
+                type: string
+                format: int32
+              password:
+                type: string
+                format: int32
+      responses:
+        200:
+          properties:
+            code:
+              type: integer
+              format: int32
+              minimum: 200
+            data:
+                $ref: '#/definitions/User'
+            msg:
+              type: string
+        400:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error400'
+        500:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error500'
+  /signup/mobile/unique/{mobile}: 
+    get:
+      tags:
+        - signup
+      summary: 查询手机号是否已经被注册
+      description: 查询手机号是否已经被注册
+      operationId: signup_mobile_unique
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: mobile
+          description: PathVariable
+          required: true
+          type: "string"
+      responses:
+        200:
+          properties:
+            code:
+              type: integer
+              format: int32
+              minimum: 200
+            data:
+              type: boolean
+            msg:
+              type: string
+        400:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error400'
+        500:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error500'
+  /signup/resetPassword:
+    post:
+      tags:
+        - signup
+      summary: 通过用户名，手机号，邮箱 重置密码(有oldPassword ，先去校验oldPassword，oldPassword允许为空)
+      description: 通过用户名，手机号，邮箱 重置密码(有oldPassword ，先去校验oldPassword，oldPassword允许为空)
+      operationId: signup_resetPassword
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: json 入参
+          required: true
+          schema:
+            type: object 
+            properties:
+              username :
+                type: string
+              password:
+                type: string
+              oldPassword:
+                type: string
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/Result1'
+        400:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error400'
+        500:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error500'
+  /user/{userId}: 
+    get:
+      tags:
+        - user
+      summary: 通过userId查询用户信息
+      description: 通过userId查询用户信息
+      operationId: user_userId
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: userId
+          description: PathVariable
+          required: true
+          type: integer
+          format: int32
+      responses:
+        200:
+          properties:
+            code:
+              type: integer
+              format: int32
+              minimum: 200
+            data:
+              $ref: '#/definitions/User'
+            msg:
+              type: string
+        400:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error400'
+        500:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error500'
+  /user/{userId}/bind/mobile/{mobile}:
+    post:
+      tags:
+        - user
+      summary: 通过userId绑定手机号
+      description: 通过userId绑定手机号
+      operationId: user_userId_bind_mobile
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: userId
+          description: PathVariable
+          required: true
+          type: integer
+          format: int32
+        - in: path
+          name: mobile
+          description: PathVariable
+          required: true
+          type: string
+      responses:
+        200:
+          properties:
+            code:
+              type: integer
+              format: int32
+              minimum: 200
+            data:
+              $ref: '#/definitions/User'
+            msg:
+              type: string
+        400:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error400'
+        500:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error500'          
+  /user/username/{username}: 
+    get:
+      tags:
+        - user
+      summary: 通过username,mobile,email查询用户信息
+      description: 通过username,mobile,email查询用户信息
+      operationId: user_username
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: username
+          description: PathVariable
+          required: true
+          type: string
+      responses:
+        200:
+          properties:
+            code:
+              type: integer
+              format: int32
+              minimum: 200
+            data:
+              $ref: '#/definitions/User'
+            msg:
+              type: string
+        400:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error400'
+        500:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error500'
+  /oauth/token: 
+    post:
+      tags:
+        - oauth
+      summary: 通过授权码或者refreshToken获取用户token对象
+      description: 通过授权码或者refreshToken获取用户token对象
+      operationId: oauth_token
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: client_id
+          description: 客户端id
+          required: true
+          type: string
+        - in: formData
+          name: client_secret
+          description: 密钥
+          required: true
+          type: string
+        - in: formData
+          name: grant_type
+          description: formData
+          required: true
+          type: string
+          enum:
+            - "authorization_code"
+            - "refresh_token"
+        - in: formData
+          name: code
+          description: 授权码或者refreshToken值
+          required: true
+          type: string
+        - in: formData
+          name: scope
+          description: 授权范围，默认all
+          required: true
+          type: string
+          enum:
+            - "all"
+      responses:
+        200:
+          properties:
+            code:
+              type: integer
+              format: int32
+              minimum: 200
+            data:
+              $ref: '#/definitions/Token'
+            msg:
+              type: string
+        400:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error400'
+        500:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error500'
+  /oauth/accessToken/{accessToken}: 
+    get:
+      tags:
+        - oauth
+      summary:  通过accessToken获取token对象
+      description:  通过accessToken获取token对象
+      operationId: oauth_accessToken
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: accessToken
+          description: PathVariable
+          required: true
+          type: string
+      responses:
+        200:
+          properties:
+            code:
+              type: integer
+              format: int32
+              minimum: 200
+            data:
+              $ref: '#/definitions/Token'
+            msg:
+              type: string
+        400:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error400'
+        500:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error500'
+  /oauth/refreshToken/{refreshToken}: 
+    get:
+      tags:
+        - oauth
+      summary:  通过refreshToken获取token对象
+      description:  通过refreshToken获取token对象
+      operationId: oauth_refreshToken
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: refreshToken
+          description: PathVariable
+          required: true
+          type: string
+      responses:
+        200:
+          properties:
+            code:
+              type: integer
+              format: int32
+              minimum: 200
+            data:
+              $ref: '#/definitions/Token'
+            msg:
+              type: string
+        400:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error400'
+        500:
+          description: 服务异常
+          schema:
+            $ref: '#/definitions/Error500'
+securityDefinitions:
+  petstore_auth:
+    type: oauth2
+    authorizationUrl: 'http://petstore.swagger.io/oauth/dialog'
+    flow: implicit
+    scopes:
+      'write:pets': modify pets in your account
+      'read:pets': read your pets
+  api_key:
+    type: apiKey
+    name: api_key
+    in: header
+definitions:
+  Credentials:
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+      clientId:
+        type: string
+      weekLogin: 
+        type: boolean
+      clientSecret:
+        type: string
+  Token:
+    type: object
+    properties:
+      accessToken:
+        type: integer
+      accessTokenExpiresTime:
+        type: integer
+      refreshToken:
+        type: integer
+      refreshTokenExpiresTime:
+        type: integer
+      userId:
+        type: integer
+        format: int64
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      username:
+        type: string
+      email:
+        type: string
+      areaCode:
+        type: string
+      mobile:
+        type: string
+  LoginInfo:
+    type: object
+    properties:
+      token:
+        $ref: '#/definitions/Token'
+      user:
+        $ref: '#/definitions/User'
+  PageInfo:
+    type: object
+    properties:
+      limit:
+        type: integer
+        format: int32
+      total:
+        type: integer
+        format: int32
+      pageNum:
+        type: integer
+        format: int32
+  Result1:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+        minimum: 200
+      data:
+        type: object
+      msg:
+        type: string
+  Result2:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+        minimum: 200
+      data:
+        type: array
+        items:
+          type: object
+      msg:
+        type: string
+      pageInfo:
+        $ref: '#/definitions/PageInfo'
+  Error400: 
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+        minimum: 400
+      msg:
+        type: string
+  Error500: 
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+        minimum: 500
+      msg:
+        type: string
+externalDocs:
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
